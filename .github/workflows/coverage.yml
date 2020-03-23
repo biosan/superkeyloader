@@ -1,0 +1,45 @@
+on: [push]
+
+name: 'Code Coverage'
+
+jobs:
+  coverage:
+    name: 'Generate code coverage report'
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout repository'
+        uses: actions/checkout@v1
+
+      - name: 'Install nightly toolchain'
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+
+      - name: 'Install grcov'
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: grcov
+
+      - name: 'Run tests on rust nightly (to generate coverage)'
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features --no-fail-fast
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CARGO_INCREMENTAL: '0'
+          RUSTFLAGS: '-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads -A warnings'
+
+      - name: 'Generate coverage with grcov'
+        run: grcov "./target/debug/" -s . -t lcov --llvm --branch --ignore-not-existing -o "./lcov.info" --ignore "/*" --ignore "../*"
+        shell: bash
+
+      - name: 'Upload coverage report to Coveralls'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: './lcov.info'
+

@@ -1,0 +1,8 @@
+
+# Pass these environment variables to Cross container
+# see https://github.com/rust-embedded/cross/#passing-environment-variables-into-the-build-environment
+[build.env]
+passthrough = [
+    "GITHUB_TOKEN"
+]
+

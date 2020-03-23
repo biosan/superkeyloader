@@ -1,0 +1,10 @@
+[hooks]
+# Hooks scripts are managed by `just`
+# see `justfile`
+pre-commit = "just pre-commit"
+commit-msg = "just commit-msg"
+pre-push = "just pre-push"
+
+
+[logging]
+verbose = true
