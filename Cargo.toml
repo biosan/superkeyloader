@@ -8,7 +8,7 @@ description = "A small utility to copy all your GitHub SSH public keys on your s
 readme = "README.md"
 homepage = "https://github.com/biosan/superkeyloader"
 repository = "https://github.com/biosan/superkeyloader"
-keywords = ["cli", "ssh", "github", "ssh-keys", "utility", "tool"]
+keywords = ["cli", "ssh", "github", "ssh-keys", "utility"]
 categories = ["command-line-utilities"]
 exclude = ["ci/**/*", "doc/**/*", ".**/*"]
 
