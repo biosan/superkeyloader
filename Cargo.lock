@@ -1006,6 +1006,7 @@ version = "0.1.0"
 dependencies = [
  "assert_cmd",
  "atty",
+ "base64 0.12.0",
  "clap-verbosity-flag",
  "exitfailure",
  "failure",

@@ -4,12 +4,16 @@ pub extern crate log;
 #[macro_use]
 pub extern crate serde_derive;
 
+pub extern crate base64;
+
 pub use exitfailure::ExitDisplay;
 pub use failure::ResultExt;
 
 pub mod github;
 
 pub use github as gh;
+
+pub mod gitlab;
 
 ///
 /// Handle HTTP status codes errors and "no SSH keys" error.

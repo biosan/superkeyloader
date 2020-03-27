@@ -26,6 +26,7 @@ path = "src/main.rs"
 
 [dependencies]
 atty = "0.2"
+base64 = "0.12"
 clap-verbosity-flag = "0.3.1"
 exitfailure = "0.5.1"
 failure = "0.1.5"
