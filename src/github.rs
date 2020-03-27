@@ -64,11 +64,6 @@ fn validate_username(username: &str) -> bool {
     ])
     .unwrap();
 
-    let _test1 = 45;
-    let _test2 = 45;
-    let test3 = 45;
-    println!("{}", test3);
-
     let matches: Vec<_> = username_rules.matches(username).into_iter().collect();
     // If all rules match then the username is valid
     username_rules.len() == matches.len()
