@@ -44,7 +44,7 @@ The result is this small Rust tool.
 ## Usage
 
 ```
-superkeyloader 0.1.0
+superkeyloader
 
 USAGE:
     superkeyloader [FLAGS] [OPTIONS] <username>
