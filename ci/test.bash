@@ -9,8 +9,6 @@ CROSS=$1
 # $1 {string} = <Target Triple>
 TARGET_TRIPLE=$2
 
-printenv
-
 required_arg $CROSS 'CROSS'
 required_arg $TARGET_TRIPLE '<Target Triple>'
 
