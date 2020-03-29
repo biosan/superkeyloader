@@ -23,8 +23,10 @@ mod github_integration_test {
 
     #[test]
     fn invalid_username() -> Result<(), Box<dyn std::error::Error>> {
+        init();
         let mut cmd = Command::cargo_bin(CLI_BIN)?;
         cmd = _add_api_token(cmd); // Set to token to raise API rate limit
+        cmd = _env_args(cmd); // Add additional arguments from 'RUST_TEST_ARGS' environment variable
         cmd.arg(INVALID_USERNAME);
         cmd.assert()
             .failure()
@@ -34,8 +36,10 @@ mod github_integration_test {
 
     #[test]
     fn missing_username() -> Result<(), Box<dyn std::error::Error>> {
+        init();
         let mut cmd = Command::cargo_bin(CLI_BIN)?;
         cmd = _add_api_token(cmd); // Set to token to raise API rate limit
+        cmd = _env_args(cmd); // Add additional arguments from 'RUST_TEST_ARGS' environment variable
         cmd.arg(MISSING_USERNAME);
         cmd.assert()
             .failure()
@@ -45,6 +49,7 @@ mod github_integration_test {
 
     #[test]
     fn valid_user_create_file() -> Result<(), Box<dyn std::error::Error>> {
+        init();
         let file_path = _create_test_file(0);
 
         let mut cmd = Command::cargo_bin(CLI_BIN)?;
@@ -52,6 +57,7 @@ mod github_integration_test {
         cmd.arg("--output"); // Write keys into file './test'
         cmd.arg(&file_path);
         cmd = _add_api_token(cmd); // Set to token to raise API rate limit
+        cmd = _env_args(cmd); // Add additional arguments from 'RUST_TEST_ARGS' environment variable
         cmd.arg(VALID_USERNAME);
         cmd.assert().success().stdout(
             predicate::str::contains("Downloaded")
@@ -68,6 +74,7 @@ mod github_integration_test {
 
     #[test]
     fn valid_user_append_file() -> Result<(), Box<dyn std::error::Error>> {
+        init();
         let exising_lines: usize = 3;
 
         // Create test file with 3 lines
@@ -78,6 +85,7 @@ mod github_integration_test {
         cmd.arg("--output"); // Write keys into file './test'
         cmd.arg(&file_path);
         cmd = _add_api_token(cmd); // Set to token to raise API rate limit
+        cmd = _env_args(cmd); // Add additional arguments from 'RUST_TEST_ARGS' environment variable
         cmd.arg(VALID_USERNAME);
         cmd.assert().success().stdout(
             predicate::str::contains("Downloaded")
@@ -87,8 +95,6 @@ mod github_integration_test {
 
         let lines = _read_test_file(&file_path);
 
-        println!("{:?}", &lines);
-
         assert_eq!(lines.len(), exising_lines + VALID_USERNAME_KEYS);
 
         Ok(())
@@ -96,6 +102,7 @@ mod github_integration_test {
 
     #[test]
     fn valid_user_json_output() -> Result<(), Box<dyn std::error::Error>> {
+        init();
         let file_path = _create_test_file(0);
 
         let mut cmd = Command::cargo_bin(CLI_BIN)?;
@@ -103,6 +110,7 @@ mod github_integration_test {
         cmd.arg("--output"); // Write keys into file './test'
         cmd.arg(file_path);
         cmd = _add_api_token(cmd); // Set to token to raise API rate limit
+        cmd = _env_args(cmd); // Add additional arguments from 'RUST_TEST_ARGS' environment variable
         cmd.arg(VALID_USERNAME);
         cmd.assert()
             .success()
@@ -114,6 +122,13 @@ mod github_integration_test {
     //
     // Utility functions
     //
+
+    fn init() {
+        let _ = pretty_env_logger::env_logger::builder()
+            .is_test(true)
+            .try_init();
+    }
+
     fn _create_test_file(lines: usize) -> std::path::PathBuf {
         let postfix: u32 = rand::thread_rng().gen();
         let tempdir = std::env::temp_dir();
@@ -139,6 +154,18 @@ mod github_integration_test {
             warn!("Got a GitHub token!");
             cmd.arg("--token");
             cmd.arg(gh_token);
+        }
+        cmd
+    }
+
+    // TODO: Maybe use 'RUST_LOG' env var to set only log level
+    // NOTE: Log output should be written on file to not interfer with STDOUT/STDERR
+    fn _env_args(mut cmd: assert_cmd::cmd::Command) -> assert_cmd::cmd::Command {
+        let additional_args = env::var("RUST_TEST_ARGS");
+        if let Ok(string_args) = additional_args {
+            warn!("Got 'RUST_TEST_ARGS' environment variable");
+            let args: Vec<&str> = string_args.split_whitespace().collect();
+            cmd.args(args);
         }
         cmd
     }

@@ -195,8 +195,16 @@ mod tests {
 
     use mockito::mock;
 
+    fn init() {
+        let _ = pretty_env_logger::env_logger::builder()
+            .is_test(true)
+            .try_init();
+    }
+
     #[test]
     fn test_github_username_validation() {
+        init();
+
         assert_eq!(
             super::validate_username(&String::from(VALID_USERNAME)),
             true
@@ -217,6 +225,7 @@ mod tests {
 
     #[test]
     fn valid_response() {
+        init();
         let _m = mock("GET", "/users/testuser/keys")
             .with_status(200)
             .with_header("Content-Type", "application/json; charset=utf-8")
@@ -231,6 +240,7 @@ mod tests {
 
     #[test]
     fn invalid_response() {
+        init();
         let _m = mock("GET", "/users/testuser/keys")
             .with_status(200)
             .with_header("Content-Type", "application/json; charset=utf-8")
@@ -245,6 +255,7 @@ mod tests {
 
     #[test]
     fn no_keys_response() {
+        init();
         let _m = mock("GET", "/users/testuser/keys")
             .with_status(200)
             .with_header("Content-Type", "application/json; charset=utf-8")
@@ -259,6 +270,7 @@ mod tests {
 
     #[test]
     fn missing_username() {
+        init();
         let _m = mock("GET", "/users/erruser/keys")
             .with_status(404)
             .with_header("Content-Type", "application/json; charset=utf-8")
@@ -273,6 +285,7 @@ mod tests {
 
     #[test]
     fn invalid_username() {
+        init();
         let _m = mock("GET", "/users/testuser/keys")
             .with_status(200)
             .with_header("Content-Type", "application/json; charset=utf-8")
