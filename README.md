@@ -1,5 +1,10 @@
 # Super Key Loader
 
+[![Crates.io](https://img.shields.io/crates/v/superkeyloader.svg)](https://crates.io/crates/superkeyloader)
+[![CI Status](https://img.shields.io/github/workflow/status/biosan/superkeyloader/Mean Bean CI?label=CI)](https://github.com/biosan/superkeyloader/actions?query=workflow%3A%22Mean+Bean+CI%22)
+[![Build Status](https://img.shields.io/github/workflow/status/biosan/superkeyloader/Mean Bean Deploy)](https://github.com/biosan/superkeyloader/actions?query=workflow%3A%22Mean+Bean+Deploy%22)
+[![Coverage Status](https://coveralls.io/repos/github/biosan/superkeyloader/badge.svg?branch=master)](https://coveralls.io/github/biosan/superkeyloader?branch=master)
+
 A small utility to copy all your GitHub SSH public keys on your system.
 
 
